@@ -1,0 +1,13 @@
+# lcoal files
+.vscode
+local
+
+# Generated files
+bin/
+gen/
+out/
+
+libs/*.so
+build*/
+
+test.sh

@@ -1,0 +1,12 @@
+# lcoal files
+local
+
+# Generated files
+bin/
+gen/
+out/
+
+images/
+
+libs/*.so
+build*/
