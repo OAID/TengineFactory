@@ -41,8 +41,11 @@ public:
 
     struct FunctionComponent
     {
+        // function Name
         std::string functionName;
+        // how many outputs in function
         int function_output_count;
+        // outputs buffer
         std::vector<float*> output_buffers;
     };
 
@@ -66,6 +69,11 @@ public:
         return mImageComponent->data;
     }
 
+    /**
+     * @brief get function component by functionName ,function name is configured in the json file.
+     * @param functionName function name.
+     * @return function output.
+     */
     inline FunctionComponent* componentOutput(std::string functionName) const {
         for (std::size_t i = 0; i < mFunctionComs.size(); i++)
         {
@@ -77,6 +85,10 @@ public:
         return nullptr;
     }
 
+    /**
+     * @brief get function components.
+     * @return function outputs.
+     */
     inline std::vector<FunctionComponent*> getComponentsOutput() const {
         return mFunctionComs;
     }

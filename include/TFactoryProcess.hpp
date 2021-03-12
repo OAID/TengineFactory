@@ -32,6 +32,10 @@ namespace TFactory {
 class TFactoryProcess
 {
 public:
+    /**
+     * @brief Create Tengine Factory handler.
+     * @return handler.
+     */
     static TFactoryProcess* create();
 
     /**

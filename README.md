@@ -53,6 +53,8 @@ Tengine_Factory参考项目：
 - [Tengine](https://github.com/OAID/Tengine)
 - [TengineKit](https://github.com/OAID/TengineKit)
 - [MNN](https://github.com/alibaba/MNN)
+- [std](https://github.com/nothings/stb)
+- [rapidjson](https://github.com/Tencent/rapidjson)
 
 ## License
-[Apache License 2.0](https://img.shields.io/crates/l/r)
+[Apache License 2.0](LICENSE)
