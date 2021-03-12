@@ -7,7 +7,7 @@
      */
     static TFactoryProcess* create();
 ```
-!> The create operation must be performed first, and the api is based on this handler. It is recommended to only create it once and use it multiple times.
+!> The create operation must be performed first, and the api is based on this handler. We recommend you only create it once and use it multiple times.
 
 ## Initialization
 ```c++
@@ -45,7 +45,7 @@ There are two ways to input input:
     void runWithData(uint8_t* input_data, int width, int height);
 ```
 
-## Get output
+## Get outputs
 ```c++
     /**
      * @brief Get Tengine Factory Output.
@@ -64,7 +64,7 @@ Obtain the width, height, channel, and data of the input image in the following 
     uint8_t *input_data = com->buffer();
 ```
 
-### Get the output of each algorithm:
+### Get the outputs of each algorithm:
 There are two ways:
 - The name of the incoming algorithm, which is configured in the json file.
 
@@ -77,7 +77,7 @@ There are two ways:
     FunctionComponent* componentOutput(std::string functionName);
 ```
 
-- Get all the algorithm output.
+- Get all the algorithm outputs.
 
 ```c++
     /**
@@ -102,7 +102,7 @@ There are two ways:
     };
 ```
 
-## freed
+## Release
 ```c++
     /**
      * @brief Release Tengine Factory.
@@ -112,11 +112,11 @@ There are two ways:
 ```
 !> Remember to release, otherwise it will cause a memory leak.
 
-## Get the number of images
+## Images number
 ```c++
     /**
-     * @brief Get image count in folder.
-     * @return image count.
+     * @brief Get image number in folder.
+     * @return image number.
      */
     int imageCount();
 ```
