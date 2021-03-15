@@ -1,5 +1,5 @@
 # Introduction
-<div align=center><img width="460" height="300" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory2.png"/></div>
+<div align=center><img width="400" height="262" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory2.png"/></div>
 
 ## Tengine-Factory
 > An open source framework that accelerates the implementation of algorithms.

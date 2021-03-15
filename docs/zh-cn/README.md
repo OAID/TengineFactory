@@ -1,5 +1,5 @@
 # 介绍
-<div align=center><img width="460" height="300" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory2.png"/></div>
+<div align=center><img width="400" height="262" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory2.png"/></div>
 
 ## Tengine-Factory
 > 一个加速算法落地的开源框架。
