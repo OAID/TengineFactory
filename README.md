@@ -1,5 +1,6 @@
 
-<div align=center><img width="400" height="400" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory.png"/></div>
+<div align=center><img width="400" height="292" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory.png"/></div>
+
 =======================================================================
 
 ## 简介
