@@ -1,6 +1,7 @@
 # Introduction
-## Tengine-Factory
+<div align=center><img width="460" height="300" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory2.png"/></div>
 
+## Tengine-Factory
 > An open source framework that accelerates the implementation of algorithms.
 
 With the popularity of artificial intelligence, deep learning algorithms are becoming more and more regular, a set of frameworks that can be low-code and quickly implemented and have customized solutions is a trend. In order to shorten the algorithm landing cycle, lowering the algorithm landing threshold is an inevitable direction.

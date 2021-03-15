@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-<!-- ![logo](_media/icon.svg) -->
+<!-- ![logo](https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory.png) -->
 
 # Tengine Factory <small>v1.0.0</small>
 

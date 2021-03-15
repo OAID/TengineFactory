@@ -1,12 +1,12 @@
 
-<div align=center><img width="400" height="292" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory.png"/></div>
+<div align=center><img width="400" height="292" src="https://openailab.oss-cn-shenzhen.aliyuncs.com/logo/tenginefactory2.png"/></div>
 
 =======================================================================
 
 ## 简介
 随着人工智能的普及，深度学习算法的越来越规整，一套可以低代码并且快速落地并且有定制化解决方案的框架就是一种趋势。为了缩短算法落地周期，降低算法落地门槛是一个必然的方向。
 
-Tengine_Factory是有OPEN AI LAB自主研发的一套快速，低代码的算法落地框架。我们致力于打造一个完全开源的易用的落地解决方案，欢迎提出问题或者提交您的代码。
+TengineFactory是有OPEN AI LAB自主研发的一套快速，低代码的算法落地框架。我们致力于打造一个完全开源的易用的落地解决方案，欢迎提出问题或者提交您的代码。
 
 
 ## 文档
