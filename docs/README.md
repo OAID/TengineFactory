@@ -20,6 +20,9 @@ TengineFactory is a fast and low-code algorithm landing framework independently 
 ## Architecture Design
 ![framework](https://openailab.oss-cn-shenzhen.aliyuncs.com/tenginefactory/framework.png)
 
+### PipeLine
+![pipeline](https://openailab.oss-cn-shenzhen.aliyuncs.com/tenginefactory/pipeline.png)
+
 ## Thanks
 TengineFactory refers to the project:
 - [Tengine](https://github.com/OAID/Tengine)

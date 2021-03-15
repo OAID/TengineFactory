@@ -55,6 +55,8 @@ There are two ways to input input:
 ```
 > For each image input, a `TFactoryComponent` will be output.
 
+![TFactoryComponent](https://openailab.oss-cn-shenzhen.aliyuncs.com/tenginefactory/component.png)
+
 Obtain the width, height, channel, and data of the input image in the following way.
 ```c++
     TFactory::TFactoryComponent *com = interProcess->getComponents();

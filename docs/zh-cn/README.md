@@ -20,6 +20,9 @@ TengineFactory是有OPEN AI LAB自主研发的一套快速，低代码的算法�
 ## 架构设计
 ![framework](https://openailab.oss-cn-shenzhen.aliyuncs.com/tenginefactory/framework.png)
 
+### PipeLine
+![pipeline](https://openailab.oss-cn-shenzhen.aliyuncs.com/tenginefactory/pipeline.png)
+
 ## 致谢
 Tengine Factory参考一下项目：
 - [Tengine](https://github.com/OAID/Tengine)

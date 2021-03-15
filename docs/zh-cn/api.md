@@ -55,6 +55,8 @@
 ```
 > 对于每个图像的输入，都会输出一个`TFactoryComponent`。
 
+![TFactoryComponent](https://openailab.oss-cn-shenzhen.aliyuncs.com/tenginefactory/component.png)
+
 通过下面的方式获取输入图像的宽、高、通道、以及数据。
 ```c++
     TFactory::TFactoryComponent *com = interProcess->getComponents();
