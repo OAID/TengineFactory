@@ -30,21 +30,23 @@ int AnalysisConfig::parseConfig(const char* jsonPath)
             if (doc.HasMember(funcName.c_str()) && doc[funcName.c_str()].IsObject())
             {
                 const rapidjson::Value& func = doc[funcName.c_str()];
-                parseModelConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func);
-                parseDetectConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func);
-                parseInputStream(TFactory::DatasetCore().GetInstance()->functionList[index], func);
+                ErrorLog(parseModelConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func));
+                ErrorLog(parsePreprocessConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func));
+                ErrorLog(parsePostprecessConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func));
+                ErrorLog(paseSupportConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func));
+                ErrorLog(parseStreamConfig(TFactory::DatasetCore().GetInstance()->functionList[index], func));
             }
         }
     }
     else
     {
-        return -2;
+        std::cout << "Tengine Factory Error : parse json config wrong!" << std::endl;
     }
     
     return 0;
 }
 
-int AnalysisConfig::parseTFactoryConfig()
+ConfigErrorCode AnalysisConfig::parseTFactoryConfig()
 {
     // 解析功能
     if (doc.HasMember("Function") && doc["Function"].IsArray())
@@ -60,9 +62,9 @@ int AnalysisConfig::parseTFactoryConfig()
         }
     }
     // 解析线程数
-    if (doc.HasMember("Thread") && doc["Thread"].IsInt())
+    if (doc.HasMember("Version") && doc["Version"].IsString())
     {
-        TFactory::DatasetCore().GetInstance()->thread = doc["Thread"].GetInt();
+        TFactory::DatasetCore().GetInstance()->version = doc["Version"].GetString();
     }
 
     if (doc.HasMember("Sources") && doc["Sources"].IsString())
@@ -73,10 +75,10 @@ int AnalysisConfig::parseTFactoryConfig()
     {
         TFactory::DatasetCore().GetInstance()->sourcesPath = "";
     }
-    return 0;
+    return NO_ERROE;
 }
 
-int AnalysisConfig::parseModelConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
+ConfigErrorCode AnalysisConfig::parseModelConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
 {
     if (func.HasMember("ModelPath") && func["ModelPath"].IsString())
     {
@@ -111,28 +113,30 @@ int AnalysisConfig::parseModelConfig(std::shared_ptr<Dataset> function_handler, 
         }
         else 
         {
-            std::cout << "Tengine Factory Error :  input_type is not a correct image format !" << std::endl;
-            return -1;
+            return MODEL_IMAGE_FORMAT_ERROR;
         }
     }
-    if (func.HasMember("preprocess") && func["preprocess"].IsString())
+
+    if (func.HasMember("mean") && func["mean"].IsArray())
     {
-        if (((std::string)(func["preprocess"].GetString())).compare("none") == 0) {
-            function_handler->setPreProcessMode("None");
-        }
-        else {
-            function_handler->setPreProcessMode(func["preprocess"].GetString());
+        const rapidjson::Value& meanArray = func["mean"];
+        std::size_t meanLen = meanArray.Size();
+        for (std::size_t i = 0; i < meanLen; i++)
+        {
+            function_handler->setMeanValue(i, meanArray[i].GetFloat());
         }
     }
-    if (func.HasMember("postprocess") && func["postprocess"].IsString())
+
+    if (func.HasMember("normal") && func["normal"].IsArray())
     {
-        if (((std::string)(func["postprocess"].GetString())).compare("none") == 0) {
-            function_handler->setPostProcessMode("None");
-        }
-        else {
-            function_handler->setPostProcessMode(func["postprocess"].GetString());
+        const rapidjson::Value& normalArray = func["normal"];
+        std::size_t normalLen = normalArray.Size();
+        for (std::size_t i = 0; i < normalLen; i++)
+        {
+            function_handler->setNormalValue(i, normalArray[i].GetFloat());
         }
     }
+
     if (func.HasMember("pipelineMode") && func["pipelineMode"].IsString())
     {
         if (((std::string)(func["pipelineMode"].GetString())).compare("standard") == 0) {
@@ -142,6 +146,146 @@ int AnalysisConfig::parseModelConfig(std::shared_ptr<Dataset> function_handler, 
             function_handler->setPipelineMode(func["pipelineMode"].GetString());
         }
     }
+
+    return NO_ERROE;
+}
+
+ConfigErrorCode AnalysisConfig::parsePreprocessConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
+{
+    if (func.HasMember("preprocess") && func["preprocess"].IsString())
+    {
+        if (((std::string)(func["preprocess"].GetString())).compare("none") == 0) {
+            function_handler->setPreProcessMode("None");
+        }
+        else {
+            std::string preprocessName = func["preprocess"].GetString();
+            function_handler->setPreProcessMode(preprocessName);
+            if (func.HasMember(preprocessName.c_str()) && func[preprocessName.c_str()].IsObject())
+            {
+                const rapidjson::Value& preprocessObj = func[preprocessName.c_str()];
+                if (preprocessObj.HasMember("min_sizes") && preprocessObj["min_sizes"].IsArray())
+                {
+                    const rapidjson::Value& minSize = preprocessObj["min_sizes"];
+                    std::size_t minLen = minSize.Size();
+                    std::vector<std::vector<float>> min_boxes;
+                    for (std::size_t i = 0; i < minLen; i++)
+                    {
+                        std::vector<float> size_data;
+                        for (std::size_t j = 0; j < minSize[i].GetArray().Size(); j++)
+                        {
+                            size_data.push_back(minSize[i].GetArray()[j].GetFloat());
+                        }
+                        min_boxes.push_back(size_data);
+                    }
+                    function_handler->setMinSizes(min_boxes);
+                } else if (preprocessObj.HasMember("scales") && preprocessObj["scales"].IsArray())
+                {
+                    const rapidjson::Value& scaleArray = preprocessObj["scales"];
+                    std::size_t scaleLen = scaleArray.Size();
+                    std::vector<std::vector<float>> scales;
+                    for (std::size_t i = 0; i < scaleLen; i++)
+                    {
+                        std::vector<float> scale_data;
+                        for (std::size_t j = 0; j < scaleArray[i].GetArray().Size(); j++)
+                        {
+                            scale_data.push_back(scaleArray[i].GetArray()[j].GetFloat());
+                        }
+                        scales.push_back(scale_data);
+                    }
+                    function_handler->setScales(scales);
+
+                    if (preprocessObj.HasMember("ratios") && preprocessObj["ratios"].IsArray())
+                    {
+                        const rapidjson::Value& ratiosArray = preprocessObj["ratios"];
+                        std::size_t ratiosLen = ratiosArray.Size();
+                        std::vector<float> ratios_data;
+                        for (std::size_t i = 0; i < ratiosLen; i++)
+                        {
+                            ratios_data.push_back(ratiosArray[i].GetArray()[i].GetFloat());
+                        }
+                        function_handler->setRatios(ratios_data);
+                    }
+
+                    if (preprocessObj.HasMember("base_sizes") && preprocessObj["base_sizes"].IsArray())
+                    {
+                        const rapidjson::Value& baseSizesArray = preprocessObj["base_sizes"];
+                        std::size_t baseSizeLen = baseSizesArray.Size();
+                        std::vector<float> base_sizes_data;
+                        for (std::size_t i = 0; i < baseSizeLen; i++)
+                        {
+                            base_sizes_data.push_back(baseSizesArray[i].GetFloat());
+                        }
+                        function_handler->setBaseSizes(base_sizes_data);
+                    }
+                }
+
+                if (preprocessObj.HasMember("strides") && preprocessObj["strides"].IsArray())
+                {
+                    const rapidjson::Value& strides = preprocessObj["strides"];
+                    std::size_t stridesLen = strides.Size();
+                    std::vector<float> strides_data;
+                    for (std::size_t i = 0; i < stridesLen; i++)
+                    {
+                        strides_data.push_back(strides[i].GetFloat());
+                    }
+                    function_handler->setStrides(strides_data);
+                }
+            }
+        }
+    }
+    return NO_ERROE;
+}
+
+ConfigErrorCode AnalysisConfig::parsePostprecessConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
+{
+    if (func.HasMember("postprocess") && func["postprocess"].IsString())
+    {
+        if (((std::string)(func["postprocess"].GetString())).compare("none") == 0) {
+            function_handler->setPostProcessMode("None");
+        }
+        else {
+            std::string postprocessName = func["postprocess"].GetString();
+            function_handler->setPostProcessMode(postprocessName);            
+            if (func.HasMember(postprocessName.c_str()) && func[postprocessName.c_str()].IsObject())
+            {
+                const rapidjson::Value& postprocessObj = func[postprocessName.c_str()];
+                if (postprocessObj.HasMember("iou_threshold") && postprocessObj["iou_threshold"].IsFloat())
+                {
+                    function_handler->setIouThreshold(postprocessObj["iou_threshold"].GetFloat());
+                }
+                if (postprocessObj.HasMember("PostProcessString") && postprocessObj["PostProcessString"].IsArray())
+                {
+                    const rapidjson::Value& stringArray = postprocessObj["PostProcessString"];
+                    std::size_t tensorLen = stringArray.Size();
+                    std::vector<DicString> output_tensor;
+                    for (std::size_t i = 0; i < tensorLen; i++)
+                    {
+                        DicString tensor_string;
+                        std::string content = stringArray[i].GetString();
+                        std::vector<std::string> result = SplitString::strSplit(content, ":");
+                        if (result.size() == 1)
+                        {
+                            tensor_string.name = result[0];
+                            tensor_string.tag = "None";
+                        }
+                        else if (result.size() == 2)
+                        {
+                            std::cout << result[1] << std::endl;
+                            tensor_string.name = result[0];
+                            tensor_string.tag = result[1];
+                        }
+                        output_tensor.push_back(tensor_string);
+                    }
+                    function_handler->setPostProcessString(output_tensor);
+                }
+            }
+        }
+    }
+    return NO_ERROE;
+}
+
+ConfigErrorCode AnalysisConfig::paseSupportConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
+{
     if (func.HasMember("TensorOuputString") && func["TensorOuputString"].IsArray())
     {
         const rapidjson::Value& tensorArray = func["TensorOuputString"];
@@ -166,107 +310,15 @@ int AnalysisConfig::parseModelConfig(std::shared_ptr<Dataset> function_handler, 
         }
         function_handler->setTensorOutputString(output_tensor);
     }
-    return 0;
-}
 
-int AnalysisConfig::parseDetectConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
-{
-    if (func.HasMember("mean") && func["mean"].IsArray())
+    if (func.HasMember("clip") && func["clip"].IsBool())
     {
-        const rapidjson::Value& meanArray = func["mean"];
-        std::size_t meanLen = meanArray.Size();
-        for (std::size_t i = 0; i < meanLen; i++)
-        {
-            function_handler->setMeanValue(i, meanArray[i].GetFloat());
-        }
-    }
-
-    if (func.HasMember("normal") && func["normal"].IsArray())
-    {
-        const rapidjson::Value& normalArray = func["normal"];
-        std::size_t normalLen = normalArray.Size();
-        for (std::size_t i = 0; i < normalLen; i++)
-        {
-            function_handler->setNormalValue(i, normalArray[i].GetFloat());
-        }
-    }
-
-    if (func.HasMember("min_sizes") && func["min_sizes"].IsArray())
-    {
-        const rapidjson::Value& minSize = func["min_sizes"];
-        std::size_t minLen = minSize.Size();
-        std::vector<std::vector<float>> min_boxes;
-        for (std::size_t i = 0; i < minLen; i++)
-        {
-            std::vector<float> size_data;
-            for (std::size_t j = 0; j < minSize[i].GetArray().Size(); j++)
-            {
-                size_data.push_back(minSize[i].GetArray()[j].GetFloat());
-            }
-            min_boxes.push_back(size_data);
-        }
-        function_handler->setMinSizes(min_boxes);
-    } else if (func.HasMember("scales") && func["scales"].IsArray())
-    {
-        const rapidjson::Value& scaleArray = func["scales"];
-        std::size_t scaleLen = scaleArray.Size();
-        std::vector<std::vector<float>> scales;
-        for (std::size_t i = 0; i < scaleLen; i++)
-        {
-            std::vector<float> scale_data;
-            for (std::size_t j = 0; j < scaleArray[i].GetArray().Size(); j++)
-            {
-                scale_data.push_back(scaleArray[i].GetArray()[j].GetFloat());
-            }
-            scales.push_back(scale_data);
-        }
-        function_handler->setScales(scales);
-
-        if (func.HasMember("ratios") && func["ratios"].IsArray())
-        {
-            const rapidjson::Value& ratiosArray = func["ratios"];
-            std::size_t ratiosLen = ratiosArray.Size();
-            std::vector<float> ratios_data;
-            for (std::size_t i = 0; i < ratiosLen; i++)
-            {
-                ratios_data.push_back(ratiosArray[i].GetArray()[i].GetFloat());
-            }
-            function_handler->setRatios(ratios_data);
-        }
-
-        if (func.HasMember("base_sizes") && func["base_sizes"].IsArray())
-        {
-            const rapidjson::Value& baseSizesArray = func["base_sizes"];
-            std::size_t baseSizeLen = baseSizesArray.Size();
-            std::vector<float> base_sizes_data;
-            for (std::size_t i = 0; i < baseSizeLen; i++)
-            {
-                base_sizes_data.push_back(baseSizesArray[i].GetFloat());
-            }
-            function_handler->setBaseSizes(base_sizes_data);
-        }
-    }
-
-    if (func.HasMember("strides") && func["strides"].IsArray())
-    {
-        const rapidjson::Value& strides = func["strides"];
-        std::size_t stridesLen = strides.Size();
-        std::vector<float> strides_data;
-        for (std::size_t i = 0; i < stridesLen; i++)
-        {
-            strides_data.push_back(strides[i].GetFloat());
-        }
-        function_handler->setStrides(strides_data);
+        function_handler->setClip(func["clip"].GetBool());
     }
 
     if (func.HasMember("score_threshold") && func["score_threshold"].IsFloat())
     {
         function_handler->setScoreThreshold(func["score_threshold"].GetFloat());
-    }
-
-    if (func.HasMember("iou_threshold") && func["iou_threshold"].IsFloat())
-    {
-        function_handler->setIouThreshold(func["iou_threshold"].GetFloat());
     }
 
     if (func.HasMember("variance") && func["variance"].IsArray())
@@ -280,15 +332,10 @@ int AnalysisConfig::parseDetectConfig(std::shared_ptr<Dataset> function_handler,
         }  
         function_handler->setVariance(variance_data);
     }
-
-    if (func.HasMember("clip") && func["clip"].IsBool())
-    {
-        function_handler->setClip(func["clip"].GetBool());
-    }
-    return 0;
+    return NO_ERROE;
 }
 
-int AnalysisConfig::parseInputStream(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
+ConfigErrorCode AnalysisConfig::parseStreamConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func)
 {
     if (func.HasMember("input_stream") && func["input_stream"].IsArray())
     {
@@ -329,12 +376,28 @@ int AnalysisConfig::parseInputStream(std::shared_ptr<Dataset> function_handler, 
         }
         function_handler->setStreamContent(contents, "output");
     }
-    return 0;
+    return NO_ERROE;
 }
 
 std::vector<std::shared_ptr<Dataset>> AnalysisConfig::getConfigContent()
 {
     return DatasetCore::GetInstance()->functionList;
+}
+
+void AnalysisConfig::ErrorLog(ConfigErrorCode code)
+{
+    if (code != 0)
+        std::cout << "Tengine Factory Error : ";
+    switch (code)
+    {
+    case NO_ERROE:
+        break;
+    case MODEL_IMAGE_FORMAT_ERROR:
+         std::cout << "input_type is not a correct image format !" << std::endl;
+        break;
+    default:
+        break;
+    }
 }
 
 AnalysisConfig::~AnalysisConfig()

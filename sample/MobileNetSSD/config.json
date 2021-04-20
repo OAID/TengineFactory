@@ -1,0 +1,17 @@
+{
+    "Function" : ["MobileNetSSD"],
+    "Sources" : "./images/ssd_dog.jpg",
+    "MobileNetSSD" : {
+        "ModelPath" : "./model/mobilenet_ssd.tmfile",
+        "mean" : [127.5, 127.5, 127.5],
+        "normal" : [0.007843, 0.007843, 0.007843],
+        "input_w" : 300,
+        "input_h" : 300,
+        "input_type" : "RGB",
+        "preprocess" : "none",
+        "postprocess" : "Split",
+        "Split" : {
+            "PostProcessString" : ["detection_out:6"]
+        }
+    }
+}

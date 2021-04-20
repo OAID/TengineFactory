@@ -21,6 +21,7 @@ enum PostProcessType
 {
     PostProcessNone,
     NMS,
+    Split,
 };
 class LineBase
 {
@@ -52,6 +53,9 @@ public:
         }
         else if (type.compare("NMS") == 0) {
             return PostProcessType::NMS;
+        }
+        else if (type.compare("Split") == 0) {
+            return PostProcessType::Split;
         }
         return PostProcessType::PostProcessNone;
     }

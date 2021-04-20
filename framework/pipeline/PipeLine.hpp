@@ -9,7 +9,7 @@ namespace TFactory {
 enum PipelineType
 {
     Standard,
-    MutiInput,
+    StreamInput,
 };
 
 class PipeLine
@@ -24,8 +24,8 @@ private:
         if (type.compare("Standard") == 0) {
             return PipelineType::Standard;
         }
-        else if (type.compare("MutiInput") == 0){
-            return PipelineType::MutiInput;
+        else if (type.compare("StreamInput") == 0){
+            return PipelineType::StreamInput;
         }
         return PipelineType::Standard;
     }
@@ -34,14 +34,13 @@ public:
     PipeLine();
     ~PipeLine();
 
-    void Init();
+    void Init(int thread = 1);
     int Run(int index = -1);
     int RunFactory(uint8_t* input_data, int width, int height);
 
     std::vector<FunctionOutputDS> GetOutput();
     void Release();
     int GetImageCount();
-
 
 public:
     inline InputHandler* input() const {

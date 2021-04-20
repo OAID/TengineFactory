@@ -13,7 +13,9 @@ void InputHandler::Start(std::string path)
     {
         cap = cv::VideoCapture(0);
         if (!cap.isOpened())
+        {
             return;
+        }
     }
     else
     {
@@ -29,7 +31,7 @@ void InputHandler::Start(std::string path)
                 imageFileNames.push_back(path);
             }
         }
-        else 
+        else
         {
             imageFileNames = TFactoryFiles::getFilesName(path.c_str());
         }
@@ -48,7 +50,7 @@ int InputHandler::getVideoData()
         delete[] input_data;
     }
     input_data = new uint8_t[w * h * bpp];
-    memcpy(input_data, frame.data, w * h * bpp);   
+    memcpy(input_data, frame.data, w * h * bpp);
     return 0;
 }
 

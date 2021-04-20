@@ -2,7 +2,7 @@
 #define LINEDATA_HPP
 #include <vector>
 #include "StandardLine.hpp"
-#include "MutiInputLine.hpp"
+#include "StreamInputLine.hpp"
 
 namespace TFactory
 {

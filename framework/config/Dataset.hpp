@@ -44,6 +44,7 @@ private:
     std::string postprocessMode = "None";
     std::string pipelineMode = "Standard";
     std::vector<DicString> tensor_output_string;
+    std::vector<DicString> postprocess_string;
     std::vector<StreamContent> input_stream;
     std::vector<StreamContent> output_stream;
 public:
@@ -116,6 +117,9 @@ public:
     inline std::vector<DicString> getOutputTensorString() const {
         return tensor_output_string;
     }
+    inline std::vector<DicString> getPostProcessString() const {
+        return postprocess_string;
+    }
     
     void setFunctionName(std::string func_name);
     void setModelPath(std::string model_path);
@@ -139,5 +143,6 @@ public:
     void setPostProcessMode(std::string mode);
     void setPipelineMode(std::string mode);
     void setTensorOutputString(std::vector<DicString> ts);
+    void setPostProcessString(std::vector<DicString> ts);
 };
 #endif

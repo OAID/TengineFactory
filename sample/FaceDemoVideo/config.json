@@ -1,0 +1,40 @@
+{
+    "Function" : ["FaceDetect", "FaceLandmark"],
+    "Sources" : "",
+    "FaceDetect" : {
+        "ModelPath" : "./model/detect.tmfile",
+        "mean" : [127.0, 127.0, 127.0],
+        "normal" : [0.0078125, 0.0078125, 0.0078125],
+        "input_w" : 160,
+        "input_h" : 120,
+        "input_type" : "RGB",
+        "preprocess" : "CreateAnchor",
+        "CreateAnchor" : {
+            "min_sizes" : [
+                [10.0, 16.0, 24.0],
+                [32.0, 48.0],
+                [64.0, 96.0],
+                [128.0, 192.0, 256.0]],
+            "strides" : [8.0, 16.0, 32.0, 64.0]
+        },
+        "clip" : true,
+        "score_threshold" : 0.6,
+        "postprocess" : "NMS",
+        "NMS" : {
+            "iou_threshold" : 0.3
+        },
+        "variance" : [0.1, 0.2],
+        "TensorOuputString" : ["scores:score", "boxes:box"]
+    },
+    "FaceLandmark" : {
+        "ModelPath" : "./model/landmark.tmfile",
+        "pipelineMode" : "StreamInput",
+        "mean" : [127.0, 127.0, 127.0],
+        "normal" : [0.007874, 0.007874, 0.007874],
+        "input_w" : 160,
+        "input_h" : 160,
+        "input_type" : "RGB",
+        "input_stream" : ["FaceDetect:rect"],
+        "output_stream" : ["points:212"]
+    }
+}

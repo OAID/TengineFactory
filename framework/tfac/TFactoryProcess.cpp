@@ -18,13 +18,13 @@ TFactoryProcess* TFactoryProcess::create()
 }
 
 
-void TFactoryProcess::init(const char* jsonPath)
+void TFactoryProcess::init(const char* jsonPath, int thread)
 {
     if (!handler) handler = std::make_shared<PipeLine>();
     if (!analysis_handler) analysis_handler = std::make_shared<AnalysisConfig>();
     if (!mCom) mCom = std::make_shared<TFactoryComponent>();
     analysis_handler->parseConfig(jsonPath);
-    handler->Init();
+    handler->Init(thread);
 }
 
 void TFactoryProcess::run(int index)

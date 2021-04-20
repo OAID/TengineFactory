@@ -37,9 +37,10 @@ public:
     /**
      * @brief Initialize Tengine Factory.
      * @param jsonPath json config file path.
+     * @param thread thread num.
      * @return None.
      */
-    void init(const char* jsonPath);
+    void init(const char* jsonPath, int thread = 1);
 
     /**
      * @brief Run Tengine Factory by read json file sources.

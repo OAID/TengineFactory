@@ -98,8 +98,13 @@ void Dataset::setPipelineMode(std::string mode) {
     pipelineMode = mode;
 }
 
-
 void Dataset::setTensorOutputString(std::vector<DicString> ts) {
     tensor_output_string.clear();
     tensor_output_string = ts;
 }
+
+void Dataset::setPostProcessString(std::vector<DicString> ts) {
+    postprocess_string.clear();
+    postprocess_string = ts;
+}
+

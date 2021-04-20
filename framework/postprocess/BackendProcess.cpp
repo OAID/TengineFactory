@@ -110,7 +110,6 @@ void BackendProcess::NMS(std::vector<BBox> &input, std::vector<BBox> &output, Da
     }
 }
 
-
 BackendProcess::~BackendProcess()
 {
 }

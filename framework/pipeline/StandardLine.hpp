@@ -2,13 +2,13 @@
 #define STANDARDLINE_HPP
 
 #include <iostream>
-#include "LineBase.hpp"
+#include "LineFunc.hpp"
 #include "Dataset.hpp"
 #include "ImageDispose.hpp"
 #include <memory>
 
 namespace TFactory {
-class StandardLine : public LineBase
+class StandardLine : public LineFunc
 {
 private:
     Anchor anchor;
@@ -21,9 +21,6 @@ public:
     std::vector<float*> onReceiveOutput();
     void onDestory();
     ~StandardLine();
-private:
-    void NoPostProcess();
-    void NMS();
 };
 }
 #endif

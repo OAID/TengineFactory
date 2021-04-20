@@ -4,17 +4,19 @@
 
 using namespace std;
 namespace TFactory {
-PipeLine::PipeLine(/* args */)
+PipeLine::PipeLine()
 {
 }
 
-void PipeLine::Init()
+void PipeLine::Init(int thread)
 {
     if (input_handler) return;
     input_handler = std::make_shared<InputHandler>();
     line_manager = std::make_shared<LineData>();
     tengine_controller = std::make_shared<StandardLine>();
+
     tengine_controller->tengineHandler->initTengine();
+    DatasetCore::GetInstance()->thread = thread;
     for (std::size_t i = 0; i < DatasetCore::GetInstance()->functionList.size(); i++)
     {
         LineBase *line;
@@ -23,8 +25,8 @@ void PipeLine::Init()
         case PipelineType::Standard:
             line = new StandardLine();
             break;
-        case PipelineType::MutiInput:
-            line = new MutiInputLine();
+        case PipelineType::StreamInput:
+            line = new StreamInputLine();
             break;
         default:
             break;

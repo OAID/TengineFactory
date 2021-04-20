@@ -25,9 +25,10 @@ public:
     }
     std::shared_ptr<Dataset> getDataset(const char* FunctionName);
 public:
+    std::string version = "0.0";
     std::vector<std::shared_ptr<Dataset>> functionList;
-    int thread  = 1;
     std::string sourcesPath = "";
+    int thread = 1;
 private:
     static std::shared_ptr<DatasetCore> instance;
 };

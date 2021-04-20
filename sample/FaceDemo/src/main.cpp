@@ -6,9 +6,8 @@
 int main(int argc, char **argv)
 {
     std::shared_ptr<TFactory::TFactoryProcess> interProcess = std::shared_ptr<TFactory::TFactoryProcess>(
-        TFactory::TFactoryProcess::create()
-    );
-    interProcess->init("./config.json");
+        TFactory::TFactoryProcess::create());
+    interProcess->init("./config.json", 2);
     int count = interProcess->imageCount();
     std::cout << "Image Count : " << count << std::endl;
     for (int index = 0; index < count; index++)
@@ -20,7 +19,7 @@ int main(int argc, char **argv)
         int channel = com->channel();
         uint8_t *input_data = com->buffer();
         cv::Mat frame(image_h, image_w, CV_8UC3, input_data);
-        
+
         for (std::size_t i = 0; i < com->getComponentsOutput().size(); i++)
         {
             TFactory::TFactoryComponent::FunctionComponent *fCom = com->getComponentsOutput()[i];
@@ -33,8 +32,8 @@ int main(int argc, char **argv)
                     float x2 = fCom->output_buffers[j][3];
                     float y2 = fCom->output_buffers[j][4];
 
-                    cv::Point pt1((x1) * image_w, (y1) * image_h);
-                    cv::Point pt2((x2) * image_w, (y2) * image_h);
+                    cv::Point pt1((x1)*image_w, (y1)*image_h);
+                    cv::Point pt2((x2)*image_w, (y2)*image_h);
                     cv::rectangle(frame, pt1, pt2, cv::Scalar(255, 0, 0), 2);
                 }
             }
@@ -56,6 +55,6 @@ int main(int argc, char **argv)
         cv::imwrite(output_name, frame);
     }
     interProcess->release();
-    
+
     return 0;
 }

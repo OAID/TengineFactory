@@ -12,14 +12,27 @@
 #include "rapidjson/stringbuffer.h"
 
 namespace TFactory {
+enum ConfigErrorCode
+{
+    NO_ERROE = 0,
+
+    MODEL_IMAGE_FORMAT_ERROR = 10,
+
+};
 class AnalysisConfig
 {
+
 private:
     rapidjson::Document doc;        
-    int parseTFactoryConfig();
-    int parseModelConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
-    int parseDetectConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
-    int parseInputStream(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
+    ConfigErrorCode parseTFactoryConfig();
+    ConfigErrorCode parseModelConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
+    ConfigErrorCode parsePreprocessConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
+    ConfigErrorCode parsePostprecessConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
+    ConfigErrorCode paseSupportConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
+    ConfigErrorCode parseStreamConfig(std::shared_ptr<Dataset> function_handler, const rapidjson::Value& func);
+
+    void ErrorLog(ConfigErrorCode code);
+
 public:
     AnalysisConfig(/* args */);
     ~AnalysisConfig();
