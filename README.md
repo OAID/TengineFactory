@@ -4,11 +4,11 @@
 ## 简介
 随着人工智能的普及，深度学习算法的越来越规整，一套可以低代码并且快速落地并且有定制化解决方案的框架就是一种趋势。为了缩短算法落地周期，降低算法落地门槛是一个必然的方向。
 
-TengineFactory是有OPEN AI LAB自主研发的一套快速，低代码的算法落地框架。我们致力于打造一个完全开源的易用的落地解决方案，欢迎提出问题或者提交您的代码。
+TengineFactory 是由 OPEN AI LAB 自主研发的一套快速，低代码的算法落地框架。我们致力于打造一个完全开源的易用的落地解决方案，欢迎提出问题或者提交您的代码。
 
 
 ## 文档
-Tengine Factory的使用文档请移步至[点击这里](https://tenginefactorydocs.readthedocs.io/zh/latest/)。
+Tengine Factory 的使用文档请移步至[点击这里](https://tenginefactorydocs.readthedocs.io/zh/latest/)。
 
 [![Apache 2.0](https://img.shields.io/crates/l/r)](LICENSE)  
 
@@ -39,7 +39,7 @@ Tengine_Factory参考项目：
 - [Tengine](https://github.com/OAID/Tengine)
 - [TengineKit](https://github.com/OAID/TengineKit)
 - [MNN](https://github.com/alibaba/MNN)
-- [std](https://github.com/nothings/stb)
+- [stb](https://github.com/nothings/stb)
 - [rapidjson](https://github.com/Tencent/rapidjson)
 
 ## License
