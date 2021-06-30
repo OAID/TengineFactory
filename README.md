@@ -8,7 +8,7 @@ TengineFactory 是由 OPEN AI LAB 自主研发的一套快速，低代码的算�
 
 
 ## 文档
-Tengine Factory 的使用文档请移步至[点击这里](https://tenginefactorydocs.readthedocs.io/zh/latest/)。
+Tengine Factory 的使用文档请移步至[点击这里](https://tenginefactorydocs.readthedocs.io/zh_CN/latest/)。
 
 [![Apache 2.0](https://img.shields.io/crates/l/r)](LICENSE)  
 
